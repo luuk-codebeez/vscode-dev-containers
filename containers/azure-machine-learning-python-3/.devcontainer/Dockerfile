@@ -8,7 +8,19 @@ FROM mcr.microsoft.com/vscode/devcontainers/base:ubuntu-18.04
 
 ARG ANACONDA_VERSION=2020.02
 
-ARG AZURE_ML_SDK_EXTRAS=notebooks,automl
+ARG AZURE_ML_SDK_EXTRAS=notebooks
+
+ARG DEFAULT_UTILS="\
+    pylint \
+    flake8 \
+    autopep8 \
+    black \
+    pytest \
+    yapf \
+    mypy \
+    pydocstyle \
+    pycodestyle \
+    bandit"
 
 # The javascript-node image includes a non-root node user with sudo access. Use 
 # the "remoteUser" property in devcontainer.json to use it. On Linux, the container 
@@ -70,6 +82,42 @@ RUN apt-get update \
     && apt-get autoremove -y \
     && apt-get clean -y \
     && rm -rf /var/lib/apt/lists/*
+
+# Install custom requirements
+RUN apt-get update \
+    #
+    # Install azure cli with devops and ml extensions
+    && curl -sL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor | tee /etc/apt/trusted.gpg.d/microsoft.asc.gpg > /dev/null \
+    && AZ_REPO=$(lsb_release -cs) \
+    && echo "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ $AZ_REPO main" | tee /etc/apt/sources.list.d/azure-cli.list \
+    && apt-get update \
+    && apt-get install azure-cli \
+    #
+    # Install azure ML and devops extensions
+    && az extension add -n azure-cli-ml \
+    && az extension add -n azure-devops \
+    #
+    # Install Ansible
+    && apt-get install -y libssl-dev libffi-dev \
+    && /opt/conda/bin/pip install ansible[azure] \
+    #
+    # Install azureml-dataprep pandas support and dev dependencies
+    && su --login -c "${CONDA_INSTALL_PATH}/bin/pip install --no-cache-dir  azureml-dataprep[pandas] ${DEFAULT_UTILS}" ${USERNAME} 2>&1 \
+    #
+    # Install apt-get dev dependencies
+    && apt-get install -y \
+    vim \
+    # Clean up
+    && apt-get autoremove -y \
+    && apt-get clean -y \
+    && rm -rf /var/lib/apt/lists/*
+
+# Create basic ssh config
+RUN mkdir -p /home/vscode/.ssh \
+    && echo "Host github.com\n  HostName github.com\n  User git\n  IdentityFile id_github_rsa\nHost ssh.dev.azure.com\n  Hostname ssh.dev.azure.com\n  IdentityFile id_azure_rsa" >> /home/vscode/.ssh/config \
+    && touch /home/vscode/.ssh/known_hosts \
+    && chown vscode:vscode /home/vscode/.ssh/config \
+    && chown vscode:vscode /home/vscode/.ssh/known_hosts
 
 # Switch back to dialog for any ad-hoc use of apt-get
 ENV DEBIAN_FRONTEND=dialog
