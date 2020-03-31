@@ -28,6 +28,7 @@
 		"ms-toolsai.vscode-ai",
 		"ms-azuretools.vscode-docker",
 		"ms-python.python",
+		"ms-python.vscode-pylance",
 		"ms-vscode.azurecli",
 		"ms-azure-devops.azure-pipelines",
 		"msazurermtools.azurerm-vscode-tools",
