@@ -1,10 +1,16 @@
 trigger:
   branches:
-    include: ['*']
+    include: ['add-azure-cli-ansible-and-others']
   tags:
     include: ['*']
 
 steps:
+- task: Docker@2
+  inputs:
+    containerRegistry: 'vscode-dockerregistry'
+    repository: 'vscode'
+    command: 'buildAndPush'
+    Dockerfile: 'containers/azure-machine-learning-python-3/.devcontainer/Dockerfile'
 
-- script: |
-    echo "Stub for OSS CG ingestion"
+
+
