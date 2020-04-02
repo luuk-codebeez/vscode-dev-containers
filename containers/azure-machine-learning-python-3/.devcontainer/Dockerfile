@@ -36,9 +36,9 @@ RUN apt-get update \
     #
     # Alter vscode user as needed
     && if [ "$USER_GID" != "1000" ] || [ "$USER_UID" != "1000" ]; then \
-        groupmod --gid $USER_GID $USERNAME \
-        && usermod --uid $USER_UID --gid $USER_GID $USERNAME \
-        && chown -R $USER_UID:$USER_GID /home/$USERNAME; \
+    groupmod --gid $USER_GID $USERNAME \
+    && usermod --uid $USER_UID --gid $USER_GID $USERNAME \
+    && chown -R $USER_UID:$USER_GID /home/$USERNAME; \
     fi \
     #
     # Install Docker CLI
@@ -55,16 +55,16 @@ RUN apt-get update \
     && chown ${USERNAME}:root /opt/conda \
     && echo "Downloading Anaconda..." \
     && su --login -c "wget -q https://repo.anaconda.com/archive/Anaconda3-${ANACONDA_VERSION}-Linux-x86_64.sh -O /tmp/anaconda-install.sh \
-        && /bin/bash /tmp/anaconda-install.sh -u -b -p ${CONDA_INSTALL_PATH}" ${USERNAME} 2>&1  \
+    && /bin/bash /tmp/anaconda-install.sh -u -b -p ${CONDA_INSTALL_PATH}" ${USERNAME} 2>&1  \
     && rm /tmp/anaconda-install.sh \
     && ln -s ${CONDA_INSTALL_PATH}/etc/profile.d/conda.sh /etc/profile.d/conda.sh \
     # Add conda init to .bashrc/.zshrc, tweak ownership if UID was changed
     && export SNIPPET="export PATH=\$PATH:\$HOME/.local/bin \
-        && if [ \"\$(stat -c '%U' ${CONDA_INSTALL_PATH})\" != \"${USERNAME}\" ]; then \
-            sudo chown -R ${USERNAME}:root ${CONDA_INSTALL_PATH}; \
-        fi \
-        && . ${CONDA_INSTALL_PATH}/etc/profile.d/conda.sh \
-        && conda activate base" \
+    && if [ \"\$(stat -c '%U' ${CONDA_INSTALL_PATH})\" != \"${USERNAME}\" ]; then \
+    sudo chown -R ${USERNAME}:root ${CONDA_INSTALL_PATH}; \
+    fi \
+    && . ${CONDA_INSTALL_PATH}/etc/profile.d/conda.sh \
+    && conda activate base" \
     && echo "$SNIPPET" | tee -a /root/.bashrc >> /home/${USERNAME}/.bashrc \
     && echo "$SNIPPET" | tee -a /root/.zshrc >> /home/${USERNAME}/.zshrc \
     && find ${CONDA_INSTALL_PATH}/ -follow -type f -name '*.a' -delete \
@@ -112,7 +112,6 @@ RUN apt-get update \
     && apt-get clean -y \
     && rm -rf /var/lib/apt/lists/*
 
-<<<<<<< HEAD
 # Install terraform
 RUN apt-get update \
     && apt-get install unzip \
@@ -126,18 +125,12 @@ RUN apt-get update \
     && apt-get clean -y \
     && rm -rf /var/lib/apt/lists/*
 
-# Install KubeCtl and Helm
-RUN curl -sSL -o /usr/local/bin/kubectl https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl \
-    && chmod +x /usr/local/bin/kubectl \
-    && curl -s https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash -
-=======
 # Create basic ssh config
 RUN mkdir -p /home/vscode/.ssh \
     && echo "Host github.com\n  HostName github.com\n  User git\n  IdentityFile id_github_rsa\nHost ssh.dev.azure.com\n  Hostname ssh.dev.azure.com\n  IdentityFile id_azure_rsa" >> /home/vscode/.ssh/config \
     && touch /home/vscode/.ssh/known_hosts \
     && chown vscode:vscode /home/vscode/.ssh/config \
     && chown vscode:vscode /home/vscode/.ssh/known_hosts
->>>>>>> 45497418 (rebase on master)
 
 # Switch back to dialog for any ad-hoc use of apt-get
 ENV DEBIAN_FRONTEND=dialog
