@@ -8,6 +8,9 @@ FROM mcr.microsoft.com/vscode/devcontainers/base:ubuntu-18.04
 
 ARG ANACONDA_VERSION=2020.02
 
+# Same terraform version as azure cloud cli
+ARG TERRAFORM_VERSION="0.12.23"
+
 ARG AZURE_ML_SDK_EXTRAS=notebooks
 
 ARG DEFAULT_UTILS="\
@@ -107,6 +110,19 @@ RUN apt-get update \
     # Install apt-get dev dependencies
     && apt-get install -y \
     vim \
+    # Clean up
+    && apt-get autoremove -y \
+    && apt-get clean -y \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install terraform
+RUN apt-get update \
+    && apt-get install unzip \
+    && curl -O -L https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip \
+    && unzip terraform_${TERRAFORM_VERSION}_linux_amd64.zip \
+    && chown vscode terraform \
+    && mv terraform /usr/local/bin \
+    && rm terraform_${TERRAFORM_VERSION}_linux_amd64.zip \
     # Clean up
     && apt-get autoremove -y \
     && apt-get clean -y \
