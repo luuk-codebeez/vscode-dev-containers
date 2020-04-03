@@ -130,12 +130,5 @@ RUN apt-get update \
     && apt-get clean -y \
     && rm -rf /var/lib/apt/lists/*
 
-# Create basic ssh config
-RUN mkdir -p /home/vscode/.ssh \
-    && echo "Host github.com\n  HostName github.com\n  User git\n  IdentityFile id_github_rsa\nHost ssh.dev.azure.com\n  Hostname ssh.dev.azure.com\n  IdentityFile id_azure_rsa" >> /home/vscode/.ssh/config \
-    && touch /home/vscode/.ssh/known_hosts \
-    && chown vscode:vscode /home/vscode/.ssh/config \
-    && chown vscode:vscode /home/vscode/.ssh/known_hosts
-
 # Switch back to dialog for any ad-hoc use of apt-get
 ENV DEBIAN_FRONTEND=dialog
