@@ -1,15 +1,18 @@
-name: Update CG Manifest
+name: Run Patches
 
-on:
-  repository_dispatch:
+on: 
+  #repository_dispatch:
+  push:
+    branches: [master]
+    paths:
+      - 'build/patch/**'
 
 jobs:
-  cgmanifest:
-    name: Generate cgmanifest.json
-    runs-on: ubuntu-latest
+  patch-all:
+    name: Run Patches
     if: "!contains(github.event.head_commit.message, 'Automated update') && !contains(github.event.head_commit.message, 'CI ignore')"
+    runs-on: ubuntu-latest
     steps:
-
     - name: Checkout
       id: checkout
       uses: actions/checkout@v1
@@ -20,8 +23,8 @@ jobs:
       with:
         creds: ${{ secrets.AZ_ACR_CREDS }}
 
-    - name: Update CG Manifest
-      id: update_cg_manifest
+    - name: Run patches
+      id: run_all_patches
       run: |
         set -e
 
@@ -29,22 +32,16 @@ jobs:
         ACR_REGISTRY_NAME=$(echo ${{ secrets.REGISTRY }} | grep -oP '(.+)(?=\.azurecr\.io)')
         az acr login --name $ACR_REGISTRY_NAME
 
-        # Pull images and update cgmanifest.json
+        # Execute patching
         yarn install
-        GIT_BRANCH=$(echo "${{ github.ref }}" | grep -oP 'refs/(heads|tags)/\K(.+)')
-        if [ "$GIT_BRANCH" == "" ]; then 
-            GIT_BRANCH=master
-        fi
-        build/vscdc cg  --no-build \
-                        --release $GIT_BRANCH \
-                        --github-repo ${{ github.repository }} \
-                        --registry ${{ secrets.REGISTRY }} \
-                        --registry-path ${{ secrets.REGISTRY_BASE_PATH }}
+        build/vscdc patch --all \
+                          --registry ${{ secrets.REGISTRY }} \
+                          --registry-path ${{ secrets.REGISTRY_BASE_PATH }}
 
-        # Push updated cgmnaifest.json to source control
+        # Add resulting status.json file back to source control
         git config --global user.email "vscr-feedback@microsoft.com"
         git config --global user.name "CI"
-        git add cgmanifest.json
+        git add build/patch/status.json
         git commit -m 'Automated update' \
           && git push "https://ci:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}" "HEAD:${{ github.ref }}" \
-          || echo 'No updates to cgmanifest.json'
+          || echo 'No updates to status.json'

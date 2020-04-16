@@ -274,7 +274,7 @@
                 "Type": "npm",
                 "Npm": {
                     "Name": "tslint",
-                    "Version": "6.1.0"
+                    "Version": "6.1.1"
                 }
             }
         },
@@ -840,7 +840,7 @@
                 "Type": "Pip",
                 "Pip": {
                     "Name": "autopep8",
-                    "Version": "1.5"
+                    "Version": "1.5.1"
                 }
             }
         },
@@ -912,7 +912,7 @@
                 "Type": "Pip",
                 "Pip": {
                     "Name": "virtualenv",
-                    "Version": "20.0.15"
+                    "Version": "20.0.17"
                 }
             }
         },
