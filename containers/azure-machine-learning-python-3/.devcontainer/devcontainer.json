@@ -4,8 +4,11 @@
 	// This line allows you to use Docker runconfigs if you set "sharedVolumes": false
 	"mounts": [
 		"source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind",
-		"source=C:\\Users\\LuukvanderVelden\\Coding\\vscode\\container_home,target=/home/container_home,type=bind,consistency=delegated",
+		"source=C:\\Users\\LuukvanderVelden\\Coding\\vscode\\container_home,target=/home/container_home,type=bind,consistency=delegated"
 	],
+	"containerEnv": {
+		"ANSIBLE_CONFIG": "./ansible.cfg"
+	},
 	// Set *default* container specific settings.json values on container create.
 	"settings": {
 		"terminal.integrated.shell.linux": "/usr/bin/zsh",
