@@ -1,6 +1,6 @@
 trigger:
   branches:
-    include: ['add-azure-cli-ansible-and-others']
+    include: ['add-home-management']
   tags:
     include: ['*']
 
