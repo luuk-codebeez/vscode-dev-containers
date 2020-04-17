@@ -33,6 +33,7 @@
 		"msazurermtools.azurerm-vscode-tools",
 		"vscoss.vscode-ansible",
 		"mauve.terraform",
+		"ms-azuretools.vscode-azurefunctions",
 	],
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],

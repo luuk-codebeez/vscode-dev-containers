@@ -121,7 +121,7 @@ RUN apt-get update \
 
 # Install terraform
 RUN apt-get update \
-    && apt-get install unzip \
+    && apt-get install -y unzip graphviz \
     && curl -O -L https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip \
     && unzip terraform_${TERRAFORM_VERSION}_linux_amd64.zip \
     && chown vscode terraform \
@@ -136,6 +136,20 @@ RUN apt-get update \
 RUN curl -sSL -o /usr/local/bin/kubectl https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl \
     && chmod +x /usr/local/bin/kubectl \
     && curl -s https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash -
+
+RUN wget -q https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb \
+    && dpkg -i packages-microsoft-prod.deb \
+    && apt-get update \
+    && apt-get install -y \
+    azure-functions-core-tools-3 \
+    && apt-get autoremove -y \
+    && apt-get clean -y \
+    && rm -rf /var/lib/apt/lists/* \
+    && mkdir -p /home/vscode/.local/share \
+    && chown -R vscode /home/vscode
+    
+# Azure Functions Core Tools needs a place to save data
+ENV XDG_DATA_HOME=/home/vscode/.local/share
 
 # Switch back to dialog for any ad-hoc use of apt-get
 ENV DEBIAN_FRONTEND=dialog
