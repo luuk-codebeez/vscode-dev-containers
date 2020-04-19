@@ -346,3 +346,4 @@ ASALocalRun/
 
 # VSCode workspace configuration
 *.code-workspace
+.vscode/
