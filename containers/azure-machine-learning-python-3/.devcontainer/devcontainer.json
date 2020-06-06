@@ -4,14 +4,13 @@
 	// This line allows you to use Docker runconfigs if you set "sharedVolumes": false
 	"mounts": [
 		"source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind",
-		"source=C:\\Users\\LuukvanderVelden\\Coding\\vscode\\container_home,target=/home/container_home,type=bind,consistency=delegated"
 	],
 	"containerEnv": {
 		"ANSIBLE_CONFIG": "./ansible.cfg"
 	},
 	// Set *default* container specific settings.json values on container create.
 	"settings": {
-		"terminal.integrated.shell.linux": "/usr/bin/zsh",
+		"terminal.integrated.shell.linux": "/bin/bash",
 		"python.pythonPath": "/opt/conda/bin/python",
 		"python.linting.enabled": true,
 		"python.linting.pylintEnabled": true,
@@ -37,7 +36,7 @@
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
 	// Use 'postCreateCommand' to run commands after the container is created.
-	"postCreateCommand": "/home/container_home/update_home.sh",
+	// "postCreateCommand": "",
 	// Uncomment to connect as a non-root user. See https://aka.ms/vscode-remote/containers/non-root.
 	"remoteUser": "vscode"
 }
