@@ -21,14 +21,6 @@ RUN apt-get update \
     && apt-get install -y \
     vim \
     git \
-    curl \
-    #
-    # Install azure cli with devops and ml extensions
-    && curl -sL https://aka.ms/InstallAzureCLIDeb | bash \
-    #
-    # Install azure ML and devops extensions
-    && az extension add -n azure-cli-ml \
-    && az extension add -n azure-devops \
     #
     # Clean up
     && apt-get autoremove -y \
