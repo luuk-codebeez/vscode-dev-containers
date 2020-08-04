@@ -5,11 +5,19 @@
 		7071
 	],
 	"mounts": [
-		"source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind"
+		"source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind",
+		"source=C:\\Users\\LuukvanderVelden\\Coding\\vscode\\container_home,target=/home/container_home,type=bind,consistency=delegated"
 	],
 	// Set *default* container specific settings.json values on container create.
 	"settings": {
-		"terminal.integrated.shell.linux": "/bin/bash"
+		"terminal.integrated.shell.linux": "/usr/bin/zsh",
+		"python.pythonPath": "/usr/local/bin/python",
+		"python.linting.enabled": true,
+		"python.linting.pylintEnabled": true,
+		"python.linting.flake8Path": "/usr/local/bin/flake8",
+		"python.linting.pylintPath": "/usr/local/bin/pylint",
+		"python.testing.pytestPath": "/usr/local/bin/pytest",
+		"python.formatting.blackPath": "/usr/local/bin/black"
 	},
 	// Add the IDs of extensions you want installed when the container is created.
 	"extensions": [
@@ -18,10 +26,10 @@
 		"ms-python.python",
 		"ms-vscode.azurecli",
 		"ms-azure-devops.azure-pipelines",
-		"mauve.terraform"
+		"ms-azuretools.vscode-azureterraform"
 	],
 	// Use 'postCreateCommand' to run commands after the container is created.
-	// "postCreateCommand": "npm install",
+	"postCreateCommand": "/home/container_home/update_home.sh",
 	// Uncomment to connect as a non-root user. See https://aka.ms/vscode-remote/containers/non-root.
 	// "remoteUser": "vscode"
 }
