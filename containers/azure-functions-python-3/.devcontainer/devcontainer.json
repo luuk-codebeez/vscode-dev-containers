@@ -26,7 +26,8 @@
 		"ms-python.python",
 		"ms-vscode.azurecli",
 		"ms-azure-devops.azure-pipelines",
-		"ms-azuretools.vscode-azureterraform"
+		"ms-azuretools.vscode-azureterraform",
+		"4ops.terraform"
 	],
 	// Use 'postCreateCommand' to run commands after the container is created.
 	"postCreateCommand": "/home/container_home/update_home.sh",
