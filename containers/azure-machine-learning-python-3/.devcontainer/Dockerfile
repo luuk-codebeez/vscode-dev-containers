@@ -82,8 +82,8 @@ RUN apt-get update \
 # [Optional] Uncomment this section to install additional OS packages.
 # RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
 #     && apt-get -y install --no-install-recommends <your-package-list-here>
-
 # Install custom requirements
+
 RUN apt-get update \
     #
     # Install azure cli with devops and ml extensions
@@ -112,6 +112,7 @@ RUN apt-get update \
     && apt-get clean -y \
     && rm -rf /var/lib/apt/lists/*
 
+<<<<<<< HEAD
 # Install terraform
 RUN apt-get update \
     && apt-get install unzip \
@@ -129,6 +130,14 @@ RUN apt-get update \
 RUN curl -sSL -o /usr/local/bin/kubectl https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl \
     && chmod +x /usr/local/bin/kubectl \
     && curl -s https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash -
+=======
+# Create basic ssh config
+RUN mkdir -p /home/vscode/.ssh \
+    && echo "Host github.com\n  HostName github.com\n  User git\n  IdentityFile id_github_rsa\nHost ssh.dev.azure.com\n  Hostname ssh.dev.azure.com\n  IdentityFile id_azure_rsa" >> /home/vscode/.ssh/config \
+    && touch /home/vscode/.ssh/known_hosts \
+    && chown vscode:vscode /home/vscode/.ssh/config \
+    && chown vscode:vscode /home/vscode/.ssh/known_hosts
+>>>>>>> 45497418 (rebase on master)
 
 # Switch back to dialog for any ad-hoc use of apt-get
 ENV DEBIAN_FRONTEND=dialog
