@@ -1,6 +1,13 @@
+<<<<<<< HEAD
 # [Choice] Python version: 3, 3.9, 3.8, 3.7, 3.6
 ARG VARIANT=3
+=======
+# [Choice] Python version: 3, 3.8, 3.7, 3.6
+ARG VARIANT=3.8
+>>>>>>> 35f2f5f8 (working on python containers)
 FROM mcr.microsoft.com/vscode/devcontainers/python:${VARIANT}
+
+ARG TERRAFORM_VERSION="0.13.4"
 
 # [Option] Install Node.js
 ARG INSTALL_NODE="true"
@@ -18,3 +25,16 @@ RUN if [ "${INSTALL_NODE}" = "true" ]; then su vscode -c "umask 0002 && . /usr/l
 
 # [Optional] Uncomment this line to install global node packages.
 # RUN su vscode -c "source /usr/local/share/nvm/nvm.sh && npm install -g <your-package-here>" 2>&1
+
+# Install terraform
+RUN apt-get update \
+    && apt-get install unzip \
+    && curl -O -L https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip \
+    && unzip terraform_${TERRAFORM_VERSION}_linux_amd64.zip \
+    && chown vscode terraform \
+    && mv terraform /usr/local/bin \
+    && rm terraform_${TERRAFORM_VERSION}_linux_amd64.zip \
+    # Clean up
+    && apt-get autoremove -y \
+    && apt-get clean -y \
+    && rm -rf /var/lib/apt/lists/*

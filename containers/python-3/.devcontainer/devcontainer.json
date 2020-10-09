@@ -3,17 +3,25 @@
 	"build": {
 		"dockerfile": "Dockerfile",
 		"context": "..",
+<<<<<<< HEAD
 		"args": { 
 			// Update 'VARIANT' to pick a Python version: 3, 3.6, 3.7, 3.8, 3.9
 			"VARIANT": "3",
+=======
+		"args": {
+			// Update 'VARIANT' to pick a Python version: 3, 3.6, 3.7, 3.8 
+			"VARIANT": "3.8",
+>>>>>>> 35f2f5f8 (working on python containers)
 			// Options
-			"INSTALL_NODE": "true",
+			"INSTALL_NODE": "false",
 			"NODE_VERSION": "lts/*"
 		}
 	},
-
+	"mounts": [
+		"source=C:\\Users\\Luuk.vanderVelde_nsp\\Coding\\vscode\\container_home,target=/home/container_home,type=bind,consistency=delegated"
+	],
 	// Set *default* container specific settings.json values on container create.
-	"settings": { 
+	"settings": {
 		"terminal.integrated.shell.linux": "/bin/bash",
 		"python.pythonPath": "/usr/local/bin/python",
 		"python.linting.enabled": true,
@@ -28,18 +36,30 @@
 		"python.linting.pydocstylePath": "/usr/local/py-utils/bin/pydocstyle",
 		"python.linting.pylintPath": "/usr/local/py-utils/bin/pylint"
 	},
-
 	// Add the IDs of extensions you want installed when the container is created.
 	"extensions": [
+<<<<<<< HEAD
 		"ms-python.python"
 	],
 
+=======
+		"ms-python.python",
+		"ms-azure-devops.azure-pipelines",
+		"4ops.terraform"
+	],
+>>>>>>> 35f2f5f8 (working on python containers)
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
-
 	// Use 'postCreateCommand' to run commands after the container is created.
+<<<<<<< HEAD
 	// "postCreateCommand": "pip3 install --user -r requirements.txt",
 
 	// Comment out connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
 	"remoteUser": "vscode"
 }
+=======
+	// "postCreateCommand": "/home/container_home/update_home.sh",
+	// Uncomment to connect as a non-root user. See https://aka.ms/vscode-remote/containers/non-root.
+	// "remoteUser": "vscode"
+}
+>>>>>>> 35f2f5f8 (working on python containers)
