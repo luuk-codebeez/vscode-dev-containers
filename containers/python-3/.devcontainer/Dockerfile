@@ -8,6 +8,7 @@ ARG VARIANT=3.8
 FROM mcr.microsoft.com/vscode/devcontainers/python:${VARIANT}
 
 ARG TERRAFORM_VERSION="0.13.4"
+ARG POETRY_VERSION="1.1.0"
 
 # [Option] Install Node.js
 ARG INSTALL_NODE="true"
@@ -25,6 +26,10 @@ RUN if [ "${INSTALL_NODE}" = "true" ]; then su vscode -c "umask 0002 && . /usr/l
 
 # [Optional] Uncomment this line to install global node packages.
 # RUN su vscode -c "source /usr/local/share/nvm/nvm.sh && npm install -g <your-package-here>" 2>&1
+
+# Base python dependencies
+RUN pip3 --disable-pip-version-check --no-cache-dir install poetry==${POETRY_VERSION} \
+   && rm -rf /tmp/pip-tmp
 
 # Install terraform
 RUN apt-get update \
