@@ -1,10 +1,10 @@
 # Azure ML does not support Debian 10 yet, so cannot use Anaconda image as base
 FROM mcr.microsoft.com/vscode/devcontainers/base:ubuntu-18.04
 
-ARG ANACONDA_VERSION=2020.02
+ARG ANACONDA_VERSION=2020.11
 
 # Same terraform version as azure cloud cli
-ARG TERRAFORM_VERSION="0.12.23"
+ARG TERRAFORM_VERSION="0.14.7"
 
 ARG AZURE_ML_SDK_EXTRAS=notebooks
 
@@ -124,11 +124,6 @@ RUN apt-get update \
     && apt-get autoremove -y \
     && apt-get clean -y \
     && rm -rf /var/lib/apt/lists/*
-
-# Install KubeCtl and Helm
-RUN curl -sSL -o /usr/local/bin/kubectl https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl \
-    && chmod +x /usr/local/bin/kubectl \
-    && curl -s https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash -
 
 # Switch back to dialog for any ad-hoc use of apt-get
 ENV DEBIAN_FRONTEND=dialog
